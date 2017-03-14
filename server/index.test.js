@@ -17,6 +17,7 @@ describe('GET route tests', () => {
       .end((err, res) => {
         expect(res).to.be.json;
         expect(res).to.have.status(200);
+        expect(res.body).to.have.all.keys(['ipaddress', 'language', 'software']);
         done();
       });
   });

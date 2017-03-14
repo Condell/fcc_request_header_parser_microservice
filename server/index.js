@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import useragent from 'express-useragent';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -11,8 +12,14 @@ if (env === 'development') {
 
 app.enable('trust proxy');
 
+app.use(useragent.express());
+
 app.get('/api/whoami', (req, res) => {
-  res.json(req.ip);
+  res.json({
+    ipaddress: req.ip,
+    language: req.acceptsLanguages('en-US', 'en-CA'),
+    software: `${req.useragent.platform}; ${req.useragent.os}`,
+  });
 });
 
 // TODO: Set up Catch statement + general Error Handler

@@ -1,6 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
-import useragent from 'express-useragent';
+import platform from 'platform';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -12,13 +12,13 @@ if (env === 'development') {
 
 app.enable('trust proxy');
 
-app.use(useragent.express());
 
 app.get('/api/whoami', (req, res) => {
+  const platformInfo = platform.parse(req.headers['user-agent']);
   res.json({
     ipaddress: req.ip,
     language: req.acceptsLanguages('en-US', 'en-CA'),
-    software: `${req.useragent.platform}; ${req.useragent.os}`,
+    software: platformInfo.os.toString(),
   });
 });
 
